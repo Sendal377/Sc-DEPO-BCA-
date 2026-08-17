@@ -21,14 +21,14 @@
             min-height: 100vh; color: #b0b8d0; font-family: 'Rajdhani', sans-serif;
             background: var(--bg); overflow-x: hidden;
         }
-        .wallpaper { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .wallpaper { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--bg); }
         .wallpaper img { display: block; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.4) saturate(1.8) brightness(0.55); }
         .wallpaper::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2,2,8,0.25) 0%, rgba(2,2,8,0.15) 30%, rgba(2,2,8,0.35) 60%, rgba(2,2,8,0.85) 100%), linear-gradient(90deg, rgba(0,240,255,0.04), transparent 25%, transparent 75%, rgba(255,0,222,0.04)); }
         .wallpaper::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 100px rgba(0,240,255,0.05), inset 0 0 180px rgba(255,0,222,0.03), inset 0 0 250px rgba(2,2,8,0.35); }
         .nebula { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 80% 50% at 30% 20%, rgba(0,80,255,0.04), transparent), radial-gradient(ellipse 60% 40% at 70% 30%, rgba(255,0,222,0.03), transparent), radial-gradient(ellipse 90% 60% at 50% 80%, rgba(0,240,255,0.02), transparent); }
         .aurora { position: fixed; top: -20%; left: -10%; right: -10%; height: 60%; z-index: 1; pointer-events: none; opacity: 0.3; background: linear-gradient(180deg, transparent, rgba(0,240,255,0.03) 20%, rgba(255,0,222,0.02) 40%, rgba(57,255,20,0.01) 60%, transparent 80%); filter: blur(40px); animation: auroraW 12s ease-in-out infinite alternate; }
         @keyframes auroraW { 0% { transform: translateX(-5%) skewX(-2deg) scaleY(1); } 50% { transform: translateX(3%) skewX(1deg) scaleY(1.1); } 100% { transform: translateX(5%) skewX(2deg) scaleY(0.95); } }
-        .matrix { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; opacity: 0.04; }
+        .matrix { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
         .mcol { position: absolute; top: -100%; font-family: Consolas, monospace; font-size: 11px; line-height: 1; color: var(--nc); writing-mode: vertical-rl; text-orientation: upright; animation: mFall linear infinite; }
         @keyframes mFall { 0% { transform: translateY(-100%); } 100% { transform: translateY(200vh); } }
         .road-wrap { position: fixed; bottom: 0; left: 0; right: 0; height: 140px; z-index: 1; pointer-events: none; overflow: hidden; perspective: 350px; }
@@ -131,7 +131,7 @@
         .bcl:active { transform: scale(.96); }
         .status { margin-top: 12px; font-size: 12px; color: #333; min-height: 18px; letter-spacing: 1px; }
         .status.ok { color: var(--nl); text-shadow: 0 0 10px rgba(57,255,20,0.5); }
-        .status.err { color: var(--np); text-shadow: 0 0 10px rgba(255,20,147,0.5); }
+        .status.err { color: var(--na); text-shadow: 0 0 10px rgba(255,174,0,0.5); }
         .gsec { margin-bottom: 24px; }
         .gpanel { display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap; padding: 26px; background: var(--panel); border-radius: 14px; }
         .g { display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -193,13 +193,24 @@
             .instrs { gap: 10px; }
             .mgr { width: 34px; height: 34px; }
         }
+        
+        /* Modal Salin Manual */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center; }
+        .modal-box { background: #050510; border: 1px solid var(--nc); padding: 20px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: 0 0 30px rgba(0,240,255,0.2); }
+        .modal-title { color: var(--nc); font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 10px; letter-spacing: 2px; }
+        .modal-desc { color: #b0b8d0; font-size: 12px; margin-bottom: 15px; text-align: center; }
+        .modal-textarea { width: 100%; height: 200px; background: rgba(2,2,8,0.9); color: var(--nl); border: 1px solid rgba(0,240,255,0.3); border-radius: 6px; padding: 10px; font-family: Consolas, monospace; resize: none; }
+        .modal-btns { text-align: center; margin-top: 15px; display: flex; gap: 10px; justify-content: center; }
+        .modal-btn { padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; border: none; }
+        .modal-btn-copy { background: var(--nl); color: #020208; }
+        .modal-btn-close { background: var(--np); color: #fff; }
     </style>
 </head>
 <body>
     <div class="wallpaper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQEEo-styitv_loRYOWy2FHSt_p0GSLmHCbF2gS14AxWFp72_Pj43y6vM&s=10" alt="4D Neon Car"></div>
     <div class="nebula"></div><div class="aurora"></div><div class="matrix" id="matrix"></div><div class="road-wrap" id="roadWrap"><div class="road"></div></div><div class="fog"></div><div class="ltng" id="ltng"></div><div class="embers" id="embers"></div>
     <div class="content">
-        <div class="hdr"><div class="nf"><div class="hdr-c"><span class="hicon">&#9851;</span><h1 class="glitch" data-text="Dashboard Rekening" style="font-size:clamp(14px,3vw,24px)">13/08/SHE</h1><div class="leds"><span class="led lc"></span><span class="led lm"></span><span class="led ll"></span><span class="led la"></span><span class="led lp"></span></div></div><div class="viz" id="viz"></div><div class="instrs"><div class="mg mgc"><div class="mgr"><span class="mgv">88</span></div><span class="mglb">Speed</span></div><div class="mg mga"><div class="mgr"><span class="mgv">4.2</span></div><span class="mglb">RPM</span></div><div class="mg mgl"><div class="mgr"><span class="mgv">72</span></div><span class="mglb">Temp</span></div><div class="mg mgp"><div class="mgr"><span class="mgv">F</span></div><span class="mglb">Fuel</span></div></div></div></div>
+        <div class="hdr"><div class="nf"><div class="hdr-c"><span class="hicon">&#9851;</span><h1 class="glitch" data-text="Dashboard Rekening" style="font-size:clamp(14px,3vw,24px)">13/08</h1><div class="leds"><span class="led lc"></span><span class="led lm"></span><span class="led ll"></span><span class="led la"></span><span class="led lp"></span></div></div><div class="viz" id="viz"></div><div class="instrs"><div class="mg mgc"><div class="mgr"><span class="mgv">88</span></div><span class="mglb">Speed</span></div><div class="mg mga"><div class="mgr"><span class="mgv">4.2</span></div><span class="mglb">RPM</span></div><div class="mg mgl"><div class="mgr"><span class="mgv">72</span></div><span class="mglb">Temp</span></div><div class="mg mgp"><div class="mgr"><span class="mgv">F</span></div><span class="mglb">Fuel</span></div></div></div></div>
         <div class="isec"><div class="nf"><div class="nfi"><label class="ilbl" for="rawInput"><span class="led lc" style="width:5px;height:5px"></span>Input Data Mutasi</label><textarea id="rawInput" placeholder="Paste teks mutasi BCA di sini..."></textarea><div class="brow">
 <button class="bgo" onclick="processCleanData()">&#9654; Proses Data</button>
 <button class="bcopy" onclick="copyCleanData()">&#128203; Copy Hasil</button>
@@ -208,153 +219,300 @@
         <div class="gsec" id="gsec" style="display:none"><div class="nf"><div class="gpanel"><div class="g gc"><div class="gr"><div class="gdk"></div><div class="gtkw" id="tkC"></div><div class="gn"></div><div class="gdt"></div></div><span class="gv" id="totalCount">0</span><span class="glb">Transaksi</span></div><div class="g ga"><div class="gr"><div class="gdk"></div><div class="gtkw" id="tkA"></div><div class="gn"></div><div class="gdt"></div></div><span class="gv" id="totalNominal" style="font-size:13px">0</span><span class="glb">Total Nominal</span></div></div></div></div>
         <div class="tsec"><div class="nf"><div class="tc"><div class="tstrip"></div><table><thead><tr><th>NAMA REKENING</th><th>NOMINAL</th></tr></thead><tbody id="cleanResultBody"><tr class="erow"><td colspan="2">Belum ada data</td></tr></tbody></table></div></div></div>
     </div>
-<script>
-(function(){var m=document.getElementById("matrix");for(var i=0;i<16;i++){var c=document.createElement("div");c.className="mcol";c.style.left=(i/16*100)+"%";var s="";for(var j=0;j<50;j++)s+=String.fromCharCode(0x30A0+Math.random()*96);c.textContent=s;c.style.animationDuration=(8+Math.random()*12)+"s";c.style.animationDelay=Math.random()*8+"s";m.appendChild(c)}})();
-(function(){var r=document.getElementById("roadWrap");var co=["var(--nc)","var(--nm)","var(--na)"];for(var i=0;i<6;i++){var l=document.createElement("div");l.className="spdln";l.style.top=(50+Math.random()*40)+"%";l.style.width=(80+Math.random()*180)+"px";l.style.background="linear-gradient(90deg,transparent,"+co[i%3]+",transparent)";l.style.opacity=0.05+Math.random()*0.05;l.style.animationDuration=(1.5+Math.random()*2)+"s";l.style.animationDelay=Math.random()*4+"s";r.appendChild(l)}})();
-(function(){var e=document.getElementById("embers");var co=["#00f0ff","#ff00de","#39ff14","#ffae00","#ff1493"];for(var i=0;i<28;i++){var p=document.createElement("div");p.className="embr";p.style.left=Math.random()*100+"%";p.style.bottom="-5px";var sz=1+Math.random()*2.5;p.style.width=p.style.height=sz+"px";var c=co[~~(Math.random()*5)];p.style.background=c;p.style.boxShadow="0 0 6px "+c;p.style.animationDuration=(10+Math.random()*14)+"s";p.style.animationDelay=Math.random()*12+"s";e.appendChild(p)}})();
-(function(){var l=document.getElementById("ltng");setInterval(function(){if(Math.random()<0.1){l.classList.add("on");setTimeout(function(){l.classList.remove("on")},80)}},3500)})();
-(function(){var v=document.getElementById("viz");var co=["var(--nc)","var(--nm)","var(--nl)","var(--na)","var(--np)"];for(var i=0;i<45;i++){var b=document.createElement("div");b.className="vb";b.style.background=co[~~(i/9)%5];b.style.boxShadow="0 0 3px "+co[~~(i/9)%5];b.style.animationDuration=(0.25+Math.random()*0.45)+"s";b.style.animationDelay=(i*0.03)+"s";v.appendChild(b)}})();
-(function(){["tkC","tkA"].forEach(function(id){var el=document.getElementById(id);if(!el)return;for(var i=0;i<14;i++){var t=document.createElement("div");t.className="gtk";t.style.transform="rotate("+(i*25.7)+"deg)";el.appendChild(t)}})})();
+    
+    <div id="copyModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 class="modal-title">SALIN MANUAL</h3>
+            <p class="modal-desc">Browser memblokir salin otomatis. Tekan tombol "Salin Teks" di bawah ini atau blok teks lalu tekan Ctrl+C.</p>
+            <textarea id="manualCopyText" class="modal-textarea" readonly></textarea>
+            <div class="modal-btns">
+                <button id="manualCopyBtn" class="modal-btn modal-btn-copy">Salin Teks</button>
+                <button onclick="document.getElementById('copyModal').style.display='none'" class="modal-btn modal-btn-close">Tutup</button>
+            </div>
+        </div>
+    </div>
 
-function formatNominal(n){var v=Number(n);if(!Number.isFinite(v))return"0";return Math.round(v).toLocaleString("en-US")}
-function parseNom(s){s=String(s).replace(/,/g,"");var v=parseFloat(s);if(isNaN(v)||v<=0)return null;return v}
+<script>
+(function(){const m=document.getElementById("matrix");for(let i=0;i<16;i++){const c=document.createElement("div");c.className="mcol";c.style.left=(i/16*100)+"%";let s="";for(let j=0;j<50;j++)s+=String.fromCharCode(0x30A0+Math.random()*96);c.textContent=s;c.style.animationDuration=(8+Math.random()*12)+"s";c.style.animationDelay=Math.random()*8+"s";m.appendChild(c)}})();
+(function(){const r=document.getElementById("roadWrap");const co=["var(--nc)","var(--nm)","var(--na)"];for(let i=0;i<6;i++){const l=document.createElement("div");l.className="spdln";l.style.top=(50+Math.random()*40)+"%";l.style.width=(80+Math.random()*180)+"px";l.style.background="linear-gradient(90deg,transparent,"+co[i%3]+",transparent)";l.style.opacity=0.05+Math.random()*0.05;l.style.animationDuration=(1.5+Math.random()*2)+"s";l.style.animationDelay=Math.random()*4+"s";r.appendChild(l)}})();
+(function(){const e=document.getElementById("embers");const co=["#00f0ff","#ff00de","#39ff14","#ffae00","#ff1493"];for(let i=0;i<28;i++){const p=document.createElement("div");p.className="embr";p.style.left=Math.random()*100+"%";p.style.bottom="-5px";const sz=1+Math.random()*2.5;p.style.width=p.style.height=sz+"px";const c=co[Math.floor(Math.random()*5)];p.style.background=c;p.style.boxShadow="0 0 6px "+c;p.style.animationDuration=(10+Math.random()*14)+"s";p.style.animationDelay=Math.random()*12+"s";e.appendChild(p)}})();
+(function(){const l=document.getElementById("ltng");setInterval(function(){if(Math.random()<0.1){l.classList.add("on");setTimeout(function(){l.classList.remove("on")},80)}},3500)})();
+(function(){const v=document.getElementById("viz");const co=["var(--nc)","var(--nm)","var(--nl)","var(--na)","var(--np)"];for(let i=0;i<45;i++){const b=document.createElement("div");b.className="vb";b.style.background=co[Math.floor(i/9)%5];b.style.boxShadow="0 0 3px "+co[Math.floor(i/9)%5];b.style.animationDuration=(0.25+Math.random()*0.45)+"s";b.style.animationDelay=(i*0.03)+"s";v.appendChild(b)}})();
+(function(){["tkC","tkA"].forEach(function(id){const el=document.getElementById(id);if(!el)return;for(let i=0;i<14;i++){const t=document.createElement("div");t.className="gtk";t.style.transform="rotate("+(i*25.7)+"deg)";el.appendChild(t)}})})();
+
+function formatNominal(n){const v=Number(n);if(!Number.isFinite(v))return"0";return Math.round(v).toLocaleString("en-US")}
+function parseNom(s){s=String(s).replace(/,/g,"");const v=parseFloat(s);if(isNaN(v)||v<=0)return null;return v}
+
+function isValidNameLine(ln) {
+    if (!ln || ln.length < 2) return false;
+    if (/^[0-9,.]+$/.test(ln)) return false;
+    if (/^\d{10,}$/.test(ln)) return false;
+    if (/^\d{4}\/[A-Z]/i.test(ln)) return false;
+    if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(ln)) return false;
+    if (/^\d{2}\/\d{2}\s/i.test(ln)) return false;
+    if (/^0000$/i.test(ln) || /^PEND$/i.test(ln) || /^HARI\s*INI$/i.test(ln)) return false;
+    if (/^(BI-FAST|TRSF|SWITCHING|ESPAY|TRANSFER|BIAYA|CR|DB)/i.test(ln) && !/TRANSFER DR/i.test(ln)) return false;
+    if (/^ID[0-9A-Z]{10,}$/i.test(ln)) return false;
+    if (/^MASIH\s+ADA/i.test(ln)) return false;
+    if (/^SETORAN\s+VIA/i.test(ln)) return false;
+    return true;
+}
+
+function extractNameFromLine(ln) {
+    if (/^TRFDN[-\s]/i.test(ln)) {
+        const cl = ln.replace(/^TRFDN[-\s]*/i, "");
+        if (cl.length > 1 && /[a-zA-Z]/.test(cl)) return cl;
+    }
+    if (/TANGGAL\s*:\s*\d/i.test(ln)) {
+        let m = ln.match(/WSID:\S+\s+(.+)/i);
+        if (m) return m[1].trim();
+    }
+    if (/[a-zA-Z]/.test(ln)) return ln;
+    return null;
+}
 
 function processCleanData(){
-    var raw=document.getElementById("rawInput").value.trim();
-    var rb=document.getElementById("cleanResultBody");
-    var st=document.getElementById("status");
-    var gs=document.getElementById("gsec");
-    var tc=document.getElementById("totalCount");
-    var tn=document.getElementById("totalNominal");
-    rb.innerHTML="";st.textContent="";st.className="status";gs.style.display="none";
-    if(!raw){rb.innerHTML='<tr class="erow"><td colspan="2">Tidak ada data</td></tr>';st.textContent="Silakan paste data terlebih dahulu.";st.classList.add("err");return}
-    var lines=raw.split(/\r?\n/);var trimmed=[];
-    for(var k=0;k<lines.length;k++){var tl=lines[k].trim();if(tl)trimmed.push(tl)}
-    var seen={};var results=[];
-    function addResult(name,nom){if(!name||nom===null||nom<=0)return;var key=name+"|"+nom;if(!seen[key]){seen[key]=true;results.push({name:name,nominal:nom})}}
-
-    for(var i=0;i<trimmed.length;i++){
-        if(!/^CR$/i.test(trimmed[i]))continue;
-        if(i<1)continue;
-        var nom=parseNom(trimmed[i-1]);
-        if(nom===null)continue;
-        var name=null;
-        for(var j=i-1;j>=Math.max(0,i-10);j--){var m=trimmed[j].match(/^TRANSFER\s+DR\s+\d+\s+(.+)/i);if(m){name=m[1].trim();break}}
-        if(!name){
-            var zeroLine=-1;
-            for(var j=i-1;j>=Math.max(0,i-10);j--){if(/^0000$/i.test(trimmed[j])){zeroLine=j;break}}
-            if(zeroLine!==-1){
-                var cands=[];
-                for(var j=zeroLine-1;j>=Math.max(0,zeroLine-8);j--){
-                    var ln=trimmed[j];
-                    if(/^[0-9,.]+$/.test(ln))continue;if(/^\d{10,}$/.test(ln))continue;
-                    if(/^\d{4}\/[A-Z]/i.test(ln))continue;if(/^\d{2}\/\d{2}\s/i.test(ln))continue;
-                    if(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(ln))continue;if(/^HARI\s*INI$/i.test(ln))continue;if(/^PEND$/i.test(ln))continue;
-                    if(/^(BI-FAST|TRSF|SWITCHING|ESPAY|TRANSFER|BIAYA)/i.test(ln))continue;
-                    if(/^TRFDN[-\s]/i.test(ln)){var cl=ln.replace(/^TRFDN[-\s]*/i,"");if(cl.length>1&&/[a-zA-Z]/.test(cl))cands.push(cl);continue}
-                    if(/[a-zA-Z]/.test(ln)&&(ln.length>2||/\s/.test(ln)))cands.push(ln);
-                }
-                if(cands.length>0){cands.sort(function(a,b){return b.length-a.length});name=cands[0]}
-            }
-        }
-        if(!name){
-            var cands=[];
-            for(var j=i-2;j>=Math.max(0,i-8);j--){
-                var ln=trimmed[j];
-                if(/^[0-9,.]+$/.test(ln))continue;if(/^\d{10,}$/.test(ln))continue;
-                if(/^\d{4}\/[A-Z]/i.test(ln))continue;if(/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(ln))continue;
-                if(/^0000$/i.test(ln))continue;if(/^PEND$/i.test(ln))continue;
-                if(/^(BI-FAST|TRSF|SWITCHING|ESPAY|TRANSFER|BIAYA|CR|DB)$/i.test(ln))continue;
-                if(/^TRFDN[-\s]/i.test(ln)){var cl=ln.replace(/^TRFDN[-\s]*/i,"");if(cl.length>1&&/[a-zA-Z]/.test(cl))cands.push(cl);continue}
-                if(/[a-zA-Z]/.test(ln)&&(ln.length>2||/\s/.test(ln)))cands.push(ln);
-            }
-            if(cands.length>0){cands.sort(function(a,b){return b.length-a.length});name=cands[0]}
-        }
-        addResult(name,nom);
-    }
-    for(var i=0;i<trimmed.length;i++){
-        if(!/^BI-FAST\s+CR$/i.test(trimmed[i]))continue;
-        var name=null;
-        if(i+1<trimmed.length){var m=trimmed[i+1].match(/^TRANSFER\s+DR\s+\d+\s+(.+)/i);if(m)name=m[1].trim()}
-        var nom=null;
-        for(var j=i+2;j<Math.min(trimmed.length,i+8);j++){if(/^0000$/i.test(trimmed[j])){if(j+1<trimmed.length)nom=parseNom(trimmed[j+1]);break}}
-        addResult(name,nom);
-    }
-    if(results.length===0){rb.innerHTML='<tr class="erow"><td colspan="2">Tidak ada transaksi masuk yang terbaca</td></tr>';st.textContent="Data tidak berhasil dibaca.";st.classList.add("err");return}
-    var ta=0;
-    for(var i=0;i<results.length;i++){
-        var tr=document.createElement("tr");var d1=document.createElement("td");d1.textContent=results[i].name;var d2=document.createElement("td");d2.textContent=formatNominal(results[i].nominal);
-        tr.appendChild(d1);tr.appendChild(d2);rb.appendChild(tr);ta+=results[i].nominal;
-    }
-    gs.style.display="block";tc.textContent=results.length;tn.textContent="Rp "+formatNominal(ta);
-    st.textContent="Berhasil membaca "+results.length+" transaksi masuk.";st.classList.add("ok");
-    var l=document.getElementById("ltng");l.classList.add("on");setTimeout(function(){l.classList.remove("on")},90);
-    setTimeout(function(){l.classList.add("on");setTimeout(function(){l.classList.remove("on")},70)},180);
-}
-async function copyCleanData(){
-    var rows = document.querySelectorAll("#cleanResultBody tr:not(.erow)");
-    var btn = document.querySelector(".bcopy");
-
-    if(!rows.length){
-        var s = document.getElementById("status");
-        s.textContent = "Belum ada hasil yang bisa disalin.";
-        s.className = "status err";
+    const raw = document.getElementById("rawInput").value.trim();
+    const rb = document.getElementById("cleanResultBody");
+    const st = document.getElementById("status");
+    const gs = document.getElementById("gsec");
+    const tc = document.getElementById("totalCount");
+    const tn = document.getElementById("totalNominal");
+    
+    rb.innerHTML = ""; st.textContent = ""; st.className = "status"; gs.style.display = "none";
+    if(!raw){
+        rb.innerHTML = '<tr class="erow"><td colspan="2">Tidak ada data</td></tr>';
+        st.textContent = "Silakan paste data terlebih dahulu.";
+        st.classList.add("err");
         return;
     }
 
-    var output = [];
-    rows.forEach(function(row){
-        var cells = row.querySelectorAll("td");
-        if(cells.length >= 2){
-            var name = cells[0].textContent.trim();
-            var nominal = cells[1].textContent.trim();
-            if(name && nominal) output.push(name + "\t" + nominal);
+    const lines = raw.split(/\r?\n/);
+    const trimmed = [];
+    for(let k = 0; k < lines.length; k++){
+        const tl = lines[k].trim();
+        if(tl) trimmed.push(tl);
+    }
+
+    const seen = {}; 
+    const results = [];
+    
+    function addResult(name, nom){
+        if(!name || nom === null || nom <= 0) return;
+        const key = name + "|" + nom;
+        if(!seen[key]){
+            seen[key] = true;
+            results.push({ name: name, nominal: nom });
+        }
+    }
+
+    for(let i = 0; i < trimmed.length; i++){
+        if(!/^CR$/i.test(trimmed[i])) continue;
+        if(i < 1) continue;
+
+        const nom = parseNom(trimmed[i-1]);
+        if(nom === null) continue;
+
+        let name = null;
+
+        let gopayId = null;
+        let isGoPay = false;
+        for(let j = i - 1; j >= Math.max(0, i - 10); j--){
+            const ln = trimmed[j];
+            if(/^ID[0-9A-Z]{10,}$/i.test(ln)){
+                gopayId = ln.trim();
+            }
+            if(/GOPAY|DOMPET\s+ANAK\s+BANGSA/i.test(ln)){
+                isGoPay = true;
+            }
+        }
+
+        if(gopayId && isGoPay){
+            name = gopayId;
+        }
+
+        if(!name){
+            for(let j = i - 1; j >= Math.max(0, i - 10); j--){
+                const m = trimmed[j].match(/TRANSFER\s+DR\s+\d+\s+(.+)/i);
+                if(m){ name = m[1].trim(); break; }
+            }
+        }
+
+        if(!name){
+            let zeroLine = -1;
+            for(let j = i - 1; j >= Math.max(0, i - 10); j--){
+                if(/^0000$/i.test(trimmed[j])){ zeroLine = j; break; }
+                if(/^0998$/i.test(trimmed[j])){ zeroLine = j; break; }
+            }
+
+            if(zeroLine !== -1){
+                const cands = [];
+                for(let j = zeroLine - 1; j >= Math.max(0, zeroLine - 8); j--){
+                    const ln = trimmed[j];
+                    if(!isValidNameLine(ln)) continue;
+                    const extracted = extractNameFromLine(ln);
+                    if(extracted) cands.push(extracted);
+                }
+                if(cands.length > 0){ name = cands[0]; }
+            }
+        }
+
+        if(!name){
+            const cands = [];
+            for(let j = i - 2; j >= Math.max(0, i - 8); j--){
+                const ln = trimmed[j];
+                if(!isValidNameLine(ln)) continue;
+                const extracted = extractNameFromLine(ln);
+                if(extracted) cands.push(extracted);
+            }
+            if(cands.length > 0){ name = cands[0]; }
+        }
+
+        addResult(name, nom);
+    }
+
+    for(let i = 0; i < trimmed.length; i++){
+        if(!/^BI-FAST\s+CR$/i.test(trimmed[i])) continue;
+        let name = null;
+        
+        for(let j = Math.max(0, i - 5); j < Math.min(trimmed.length, i + 8); j++){
+            if(/^ID[0-9A-Z]{10,}$/i.test(trimmed[j])){
+                name = trimmed[j].trim();
+                break;
+            }
+        }
+
+        if(!name && i + 1 < trimmed.length){
+            const m = trimmed[i + 1].match(/TRANSFER\s+DR\s+\d+\s+(.+)/i);
+            if(m) name = m[1].trim();
+        }
+        let nom = null;
+        for(let j = i + 2; j < Math.min(trimmed.length, i + 8); j++){
+            if(/^0000$/i.test(trimmed[j])){
+                if(j + 1 < trimmed.length) nom = parseNom(trimmed[j + 1]);
+                break;
+            }
+        }
+        addResult(name, nom);
+    }
+
+    if(results.length === 0){
+        rb.innerHTML = '<tr class="erow"><td colspan="2">Tidak ada transaksi masuk yang terbaca</td></tr>';
+        st.textContent = "Data tidak berhasil dibaca.";
+        st.classList.add("err");
+        return;
+    }
+
+    let ta = 0;
+    for(let i = 0; i < results.length; i++){
+        const tr = document.createElement("tr");
+        const d1 = document.createElement("td"); d1.textContent = results[i].name;
+        const d2 = document.createElement("td"); d2.textContent = formatNominal(results[i].nominal);
+        tr.appendChild(d1); tr.appendChild(d2);
+        rb.appendChild(tr);
+        ta += results[i].nominal;
+    }
+
+    gs.style.display = "block";
+    tc.textContent = results.length;
+    tn.textContent = "Rp " + formatNominal(ta);
+    st.textContent = "Berhasil membaca " + results.length + " transaksi masuk.";
+    st.classList.add("ok");
+
+    const l = document.getElementById("ltng");
+    l.classList.add("on"); setTimeout(function(){ l.classList.remove("on"); }, 90);
+    setTimeout(function(){ l.classList.add("on"); setTimeout(function(){ l.classList.remove("on"); }, 70); }, 180);
+}
+
+async function copyCleanData() {
+    const rows = document.querySelectorAll("#cleanResultBody tr:not(.erow)");
+    const btn = document.querySelector(".bcopy");
+    const st = document.getElementById("status");
+
+    if (!rows.length) {
+        st.textContent = "Tidak ada data untuk disalin.";
+        st.className = "status err";
+        return;
+    }
+
+    const textArr = [];
+    rows.forEach(function(row) {
+        const cols = row.querySelectorAll("td");
+        if (cols.length >= 2) {
+            textArr.push(cols[0].textContent.trim() + "\t" + cols[1].textContent.trim());
         }
     });
 
-    if(!output.length){
-        var s = document.getElementById("status");
-        s.textContent = "Data kosong.";
-        s.className = "status err";
+    const textToCopy = textArr.join("\n");
+    let copied = false;
+
+    // 1. Metode Clipboard API Modern
+    if (navigator.clipboard && window.isSecureContext) {
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            copied = true;
+        } catch (e) {
+            // Dibiarkan saja, akan lanjut ke fallback
+        }
+    }
+
+    // 2. Metode Fallback execCommand
+    if (!copied) {
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.position = "fixed";
+            textArea.style.top = "-9999px";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            if (successful) copied = true;
+        } catch (err) {
+            // Dibiarkan saja, akan lanjut ke modal manual
+        }
+    }
+
+    // 3. Fallback Terakhir: Tampilkan Custom Modal (Popup)
+    if (!copied) {
+        document.getElementById("manualCopyText").value = textToCopy;
+        document.getElementById("copyModal").style.display = "flex";
+        document.getElementById("manualCopyText").select();
+        st.textContent = "Salin manual melalui kotak dialog yang muncul.";
+        st.className = "status err";
         return;
     }
 
-    var text = output.join("\n");
-
-    try {
-        await navigator.clipboard.writeText(text);
-    } catch(e) {
-        var ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
-    }
-
-    if(btn){
-        var oldText = btn.innerHTML;
-        btn.innerHTML = "&#10003; COPIED!";
-        btn.classList.add("copied");
-        setTimeout(function(){
-            btn.innerHTML = oldText;
-            btn.classList.remove("copied");
-        }, 1400);
-    }
-
-    var status = document.getElementById("status");
-    status.textContent = "Berhasil menyalin " + output.length + " transaksi.";
-    status.className = "status ok";
+    // Jika berhasil otomatis
+    btn.classList.add("copied");
+    const oldText = btn.innerHTML;
+    btn.innerHTML = "&#10003; Copied!";
+    st.textContent = "Berhasil menyalin data ke clipboard!";
+    st.className = "status ok";
+    setTimeout(function() {
+        btn.classList.remove("copied");
+        btn.innerHTML = oldText;
+    }, 2000);
 }
 
+// Fungsi untuk tombol di dalam modal manual
+document.getElementById("manualCopyBtn").onclick = function() {
+    const t = document.getElementById("manualCopyText");
+    t.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    this.innerText = "Tersalin!";
+    setTimeout(() => { this.innerText = "Salin Teks"; }, 2000);
+};
+
 function clearAllData(){
-    document.getElementById("rawInput").value="";
-    document.getElementById("cleanResultBody").innerHTML='<tr class="erow"><td colspan="2">Belum ada data</td></tr>';
-    document.getElementById("gsec").style.display="none";
-    var s=document.getElementById("status");s.textContent="";s.className="status";
+    document.getElementById("rawInput").value = "";
+    document.getElementById("cleanResultBody").innerHTML = '<tr class="erow"><td colspan="2">Belum ada data</td></tr>';
+    document.getElementById("gsec").style.display = "none";
+    const st = document.getElementById("status");
+    st.textContent = "";
+    st.className = "status";
 }
 </script>
 </body>
