@@ -210,7 +210,7 @@
     <div class="wallpaper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQEEo-styitv_loRYOWy2FHSt_p0GSLmHCbF2gS14AxWFp72_Pj43y6vM&s=10" alt="4D Neon Car"></div>
     <div class="nebula"></div><div class="aurora"></div><div class="matrix" id="matrix"></div><div class="road-wrap" id="roadWrap"><div class="road"></div></div><div class="fog"></div><div class="ltng" id="ltng"></div><div class="embers" id="embers"></div>
     <div class="content">
-        <div class="hdr"><div class="nf"><div class="hdr-c"><span class="hicon">&#9851;</span><h1 class="glitch" data-text="Dashboard Rekening" style="font-size:clamp(14px,3vw,24px)">13/08</h1><div class="leds"><span class="led lc"></span><span class="led lm"></span><span class="led ll"></span><span class="led la"></span><span class="led lp"></span></div></div><div class="viz" id="viz"></div><div class="instrs"><div class="mg mgc"><div class="mgr"><span class="mgv">88</span></div><span class="mglb">Speed</span></div><div class="mg mga"><div class="mgr"><span class="mgv">4.2</span></div><span class="mglb">RPM</span></div><div class="mg mgl"><div class="mgr"><span class="mgv">72</span></div><span class="mglb">Temp</span></div><div class="mg mgp"><div class="mgr"><span class="mgv">F</span></div><span class="mglb">Fuel</span></div></div></div></div>
+        <div class="hdr"><div class="nf"><div class="hdr-c"><span class="hicon">&#9851;</span><h1 class="glitch" data-text="Dashboard Rekening" style="font-size:clamp(14px,3vw,24px)">Dashboard Rekening</h1><div class="leds"><span class="led lc"></span><span class="led lm"></span><span class="led ll"></span><span class="led la"></span><span class="led lp"></span></div></div><div class="viz" id="viz"></div><div class="instrs"><div class="mg mgc"><div class="mgr"><span class="mgv">88</span></div><span class="mglb">Speed</span></div><div class="mg mga"><div class="mgr"><span class="mgv">4.2</span></div><span class="mglb">RPM</span></div><div class="mg mgl"><div class="mgr"><span class="mgv">72</span></div><span class="mglb">Temp</span></div><div class="mg mgp"><div class="mgr"><span class="mgv">F</span></div><span class="mglb">Fuel</span></div></div></div></div>
         <div class="isec"><div class="nf"><div class="nfi"><label class="ilbl" for="rawInput"><span class="led lc" style="width:5px;height:5px"></span>Input Data Mutasi</label><textarea id="rawInput" placeholder="Paste teks mutasi BCA di sini..."></textarea><div class="brow">
 <button class="bgo" onclick="processCleanData()">&#9654; Proses Data</button>
 <button class="bcopy" onclick="copyCleanData()">&#128203; Copy Hasil</button>
@@ -294,18 +294,15 @@ function processCleanData(){
         if(tl) trimmed.push(tl);
     }
 
-    const seen = {}; 
     const results = [];
     
     function addResult(name, nom){
         if(!name || nom === null || nom <= 0) return;
-        const key = name + "|" + nom;
-        if(!seen[key]){
-            seen[key] = true;
-            results.push({ name: name, nominal: nom });
-        }
+        results.push({ name: name, nominal: nom });
     }
 
+    // LOOP GABUNGAN TUNGGAL
+    // Menghapus fitur anti-duplikat sehingga semua transaksi dengan nominal sama tetap terbaca semua.
     for(let i = 0; i < trimmed.length; i++){
         if(!/^CR$/i.test(trimmed[i])) continue;
         if(i < 1) continue;
@@ -371,31 +368,6 @@ function processCleanData(){
         addResult(name, nom);
     }
 
-    for(let i = 0; i < trimmed.length; i++){
-        if(!/^BI-FAST\s+CR$/i.test(trimmed[i])) continue;
-        let name = null;
-        
-        for(let j = Math.max(0, i - 5); j < Math.min(trimmed.length, i + 8); j++){
-            if(/^ID[0-9A-Z]{10,}$/i.test(trimmed[j])){
-                name = trimmed[j].trim();
-                break;
-            }
-        }
-
-        if(!name && i + 1 < trimmed.length){
-            const m = trimmed[i + 1].match(/TRANSFER\s+DR\s+\d+\s+(.+)/i);
-            if(m) name = m[1].trim();
-        }
-        let nom = null;
-        for(let j = i + 2; j < Math.min(trimmed.length, i + 8); j++){
-            if(/^0000$/i.test(trimmed[j])){
-                if(j + 1 < trimmed.length) nom = parseNom(trimmed[j + 1]);
-                break;
-            }
-        }
-        addResult(name, nom);
-    }
-
     if(results.length === 0){
         rb.innerHTML = '<tr class="erow"><td colspan="2">Tidak ada transaksi masuk yang terbaca</td></tr>';
         st.textContent = "Data tidak berhasil dibaca.";
@@ -446,17 +418,15 @@ async function copyCleanData() {
     const textToCopy = textArr.join("\n");
     let copied = false;
 
-    // 1. Metode Clipboard API Modern
     if (navigator.clipboard && window.isSecureContext) {
         try {
             await navigator.clipboard.writeText(textToCopy);
             copied = true;
         } catch (e) {
-            // Dibiarkan saja, akan lanjut ke fallback
+            // Lanjut ke fallback
         }
     }
 
-    // 2. Metode Fallback execCommand
     if (!copied) {
         try {
             const textArea = document.createElement("textarea");
@@ -471,11 +441,10 @@ async function copyCleanData() {
             document.body.removeChild(textArea);
             if (successful) copied = true;
         } catch (err) {
-            // Dibiarkan saja, akan lanjut ke modal manual
+            // Lanjut ke modal manual
         }
     }
 
-    // 3. Fallback Terakhir: Tampilkan Custom Modal (Popup)
     if (!copied) {
         document.getElementById("manualCopyText").value = textToCopy;
         document.getElementById("copyModal").style.display = "flex";
@@ -485,7 +454,6 @@ async function copyCleanData() {
         return;
     }
 
-    // Jika berhasil otomatis
     btn.classList.add("copied");
     const oldText = btn.innerHTML;
     btn.innerHTML = "&#10003; Copied!";
@@ -497,7 +465,6 @@ async function copyCleanData() {
     }, 2000);
 }
 
-// Fungsi untuk tombol di dalam modal manual
 document.getElementById("manualCopyBtn").onclick = function() {
     const t = document.getElementById("manualCopyText");
     t.select();
