@@ -22,8 +22,8 @@
             background: var(--bg); overflow-x: hidden;
         }
         .wallpaper { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--bg); }
-        .wallpaper img { display: block; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.4) saturate(1.8) brightness(0.55); }
-        .wallpaper::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2,2,8,0.25) 0%, rgba(2,2,8,0.15) 30%, rgba(2,2,8,0.35) 60%, rgba(2,2,8,0.85) 100%), linear-gradient(90deg, rgba(0,240,255,0.04), transparent 25%, transparent 75%, rgba(255,0,222,0.04)); }
+        .wallpaper img { display: block; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.4) saturate(1.8) brightness(0,99); }
+        .wallpaper::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(2,2,8,0.25) 0%, rgba(2,2,8,0.15) 30%, rgba(2,2,8,0.35) 100%, rgba(2,2,8,0.85) 100%), linear-gradient(90deg, rgba(0,240,255,0.04), transparent 25%, transparent 75%, rgba(255,0,222,0.04)); }
         .wallpaper::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 100px rgba(0,240,255,0.05), inset 0 0 180px rgba(255,0,222,0.03), inset 0 0 250px rgba(2,2,8,0.35); }
         .nebula { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 80% 50% at 30% 20%, rgba(0,80,255,0.04), transparent), radial-gradient(ellipse 60% 40% at 70% 30%, rgba(255,0,222,0.03), transparent), radial-gradient(ellipse 90% 60% at 50% 80%, rgba(0,240,255,0.02), transparent); }
         .aurora { position: fixed; top: -20%; left: -10%; right: -10%; height: 60%; z-index: 1; pointer-events: none; opacity: 0.3; background: linear-gradient(180deg, transparent, rgba(0,240,255,0.03) 20%, rgba(255,0,222,0.02) 40%, rgba(57,255,20,0.01) 60%, transparent 80%); filter: blur(40px); animation: auroraW 12s ease-in-out infinite alternate; }
@@ -207,7 +207,7 @@
     </style>
 </head>
 <body>
-    <div class="wallpaper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQEEo-styitv_loRYOWy2FHSt_p0GSLmHCbF2gS14AxWFp72_Pj43y6vM&s=10" alt="4D Neon Car"></div>
+    <div class="wallpaper"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-MpgGjy5iK6RwowsyvashCKmdnvEDEwsfE2flpq_RhQ&s=10" alt="4D Neon Car"></div>
     <div class="nebula"></div><div class="aurora"></div><div class="matrix" id="matrix"></div><div class="road-wrap" id="roadWrap"><div class="road"></div></div><div class="fog"></div><div class="ltng" id="ltng"></div><div class="embers" id="embers"></div>
     <div class="content">
         <div class="hdr"><div class="nf"><div class="hdr-c"><span class="hicon">&#9851;</span><h1 class="glitch" data-text="Dashboard Rekening" style="font-size:clamp(14px,3vw,24px)">Dashboard Rekening</h1><div class="leds"><span class="led lc"></span><span class="led lm"></span><span class="led ll"></span><span class="led la"></span><span class="led lp"></span></div></div><div class="viz" id="viz"></div><div class="instrs"><div class="mg mgc"><div class="mgr"><span class="mgv">88</span></div><span class="mglb">Speed</span></div><div class="mg mga"><div class="mgr"><span class="mgv">4.2</span></div><span class="mglb">RPM</span></div><div class="mg mgl"><div class="mgr"><span class="mgv">72</span></div><span class="mglb">Temp</span></div><div class="mg mgp"><div class="mgr"><span class="mgv">F</span></div><span class="mglb">Fuel</span></div></div></div></div>
